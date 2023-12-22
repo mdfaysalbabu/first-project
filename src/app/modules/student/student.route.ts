@@ -1,13 +1,21 @@
 import express from 'express';
-import { StudentController } from './student.controller';
+import { StudentControllers } from './student.controller';
+import validateRequest from '../../middlewear/validateRequest';
+import { updateStudentValidationSchema } from './student.validation';
+import auth from '../../middlewear/auth';
 
 const router = express.Router();
 
-// will call controller function
-router.post('/create-student', StudentController.createStudent);
+router.get('/:id',auth('admin','faculty'), StudentControllers.getSingleStudent);
 
-router.get('/', StudentController.getAllStudents);
+router.delete('/:id', StudentControllers.deleteStudent);
 
-router.get('/:studentId', StudentController.getSingleStudents);
+router.patch(
+  '/:id',
+  validateRequest(updateStudentValidationSchema),
+  StudentControllers.updateStudent,
+);
+
+router.get('/', StudentControllers.getAllStudents);
 
 export const StudentRoutes = router;
