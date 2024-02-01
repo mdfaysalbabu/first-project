@@ -133,8 +133,8 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: localGuradianSchema,
       required: [true, 'Local guardian information is required'],
     },
-    profileImg: { type: String },
-    
+    profileImg: { type: String, default: '' },
+
     admissionSemester: {
       type: Schema.Types.ObjectId,
       ref: 'AcademicSemester',
@@ -147,7 +147,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: Schema.Types.ObjectId,
       ref: 'AcademicDepartment',
     },
-    
+    academicFaculty: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicFaculty',
+    },
   },
   {
     toJSON: {
@@ -184,7 +187,3 @@ studentSchema.statics.isUserExists = async function (id: string) {
 };
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);
-
-
-
-

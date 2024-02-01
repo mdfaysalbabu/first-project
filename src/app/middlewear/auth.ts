@@ -4,7 +4,7 @@ import httpStatus from 'http-status';
 import AppError from '../errors/AppError';
 import catchAsync from '../utils/catchAsync';
 import { NextFunction, Request, Response } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt, { JsonWebTokenError, JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import { User } from '../modules/user/user.model';
 import { TUserRole } from '../modules/user/user.interface';
@@ -14,15 +14,20 @@ const auth = (...requiredRoles: TUserRole[]) => {
     const token = req.headers.authorization;
     // checking if the token is missing
     if (!token) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+      throw new JsonWebTokenError('');
     }
 
-    // checking if the given token is valid
-    const decoded = jwt.verify(
-      token,
-      config.jwt_access_secret as string,
-    ) as JwtPayload;
-
+    let decoded;
+    try {
+      // checking if the given token is valid
+      decoded = jwt.verify(
+        token,
+        config.jwt_access_secret as string,
+      ) as JwtPayload;
+    } catch (err) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'unauthorized');
+    }
+ 
     const { role, userId, iat } = decoded;
     // checking if the user is exist
     const user = await User.isUserExistsByCustomId(userId);
