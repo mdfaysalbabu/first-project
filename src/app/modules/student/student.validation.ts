@@ -32,7 +32,6 @@ export const createStudentValidationSchema = z.object({
   body: z.object({
     password: z.string().max(20).optional(),
     student: z.object({
-      user: z.string(),
       name: createUserNameValidationSchema,
       gender: z.enum(['male', 'female', 'other']),
       dateOfBirth: z.string().optional(),
@@ -45,7 +44,6 @@ export const createStudentValidationSchema = z.object({
       guardian: createGuardianValidationSchema,
       localGuardian: createLocalGuardianValidationSchema,
       admissionSemester: z.string(),
-      // profileImg: z.string(),
       academicDepartment: z.string(),
     }),
   }),
@@ -82,7 +80,7 @@ export const updateStudentValidationSchema = z.object({
       email: z.string().email().optional(),
       contactNo: z.string().optional(),
       emergencyContactNo: z.string().optional(),
-      bloogGroup: z
+      bloodGroup: z
         .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
         .optional(),
       presentAddress: z.string().optional(),
@@ -90,7 +88,7 @@ export const updateStudentValidationSchema = z.object({
       guardian: updateGuardianValidationSchema.optional(),
       localGuardian: updateLocalGuardianValidationSchema.optional(),
       admissionSemester: z.string().optional(),
-      // profileImg: z.string().optional(),
+      profileImg: z.string().optional(),
       academicDepartment: z.string().optional(),
     }),
   }),
